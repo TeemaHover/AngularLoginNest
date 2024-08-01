@@ -6,7 +6,9 @@ import {
   FormControlName,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { response } from 'express';
+import { AuthService } from '../auth.service';
+import { json } from 'stream/consumers';
+import { LoginPage } from './login-page';
 
 @Component({
   selector: 'app-login-page',
@@ -16,7 +18,7 @@ import { response } from 'express';
   styleUrl: './login-page.component.css',
 })
 export class LoginPageComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
   loginForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl(''),
@@ -24,9 +26,12 @@ export class LoginPageComponent {
   onSubmit() {
     const formData = this.loginForm.value;
     this.http
-      .post('http://localhost:3000/login/login', formData)
+      .post<LoginPage>('http://localhost:3000/login/login', formData)
       .subscribe((response) => {
         console.log(response);
+        console.log(this.authService.decodeToken(response.access_token));
       });
   }
+
+  decoded_token = 'token';
 }
