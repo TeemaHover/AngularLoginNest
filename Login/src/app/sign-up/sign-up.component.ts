@@ -32,7 +32,7 @@ export class SignUpComponent {
   onSubmit() {
     const formData = this.signUpForm.value;
     this.http
-      .post('http://localhost:3000/user', formData)
+      .post('http://localhost:3000/users', formData)
       .subscribe((response) => {
         this.router.navigate(['/login']);
       });
