@@ -3,10 +3,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoginModule } from './login/login.module';
 import { UserModule } from './user/user.module';
+import { DatabaseModule } from './database/database.module';
+import { AuthGuard } from './login/auth.guard';
 
 @Module({
-  imports: [LoginModule, UserModule],
+  imports: [LoginModule, UserModule, DatabaseModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'APP_GUARD',
+      useValue: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

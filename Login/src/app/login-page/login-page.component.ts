@@ -7,18 +7,22 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { json } from 'stream/consumers';
 import { LoginPage } from './login-page';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css',
 })
 export class LoginPageComponent {
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private router: Router
+  ) {}
   loginForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl(''),
@@ -26,12 +30,10 @@ export class LoginPageComponent {
   onSubmit() {
     const formData = this.loginForm.value;
     this.http
-      .post<LoginPage>('http://localhost:3000/login/login', formData)
+      .post<LoginPage>('http://localhost:3000/auth', formData)
       .subscribe((response) => {
-        console.log(response);
-        console.log(this.authService.decodeToken(response.access_token));
+        localStorage.setItem('authToken', response.access_token);
+        this.router.navigate(['/about']);
       });
   }
-
-  decoded_token = 'token';
 }

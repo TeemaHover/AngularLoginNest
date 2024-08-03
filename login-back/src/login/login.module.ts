@@ -4,6 +4,8 @@ import { LoginController } from './login.controller';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { UserService } from 'src/user/user.service';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -15,6 +17,6 @@ import { jwtConstants } from './constants';
     }),
   ],
   controllers: [LoginController],
-  providers: [LoginService],
+  providers: [LoginService, JwtStrategy],
 })
 export class LoginModule {}
